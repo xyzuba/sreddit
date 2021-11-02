@@ -12,7 +12,7 @@ import { UserResolver } from "./resolvers/user";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-// import cors from "cors";
+import cors from "cors";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { MyContext } from "./types";
 
@@ -44,19 +44,20 @@ const main = async () => {
     })
   );
 
-  // app.use(
-  //   cors({
-  //     credentials: true,
-  //     origin: "https://studio.apollographql.com",
-  //   })
-  // );
+  app.use(
+    cors({
+      credentials: true,
+      origin: "http://localhost:3000",
+    })
+  );
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelpResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+    context: ({ req, res }): MyContext =>
+      ({ em: orm.em, req, res } as MyContext),
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
   });
 
@@ -65,7 +66,10 @@ const main = async () => {
   // });
 
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
 
   app.listen(4000, () => {
     console.log("server started at localhost:4000");
