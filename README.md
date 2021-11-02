@@ -1,1 +1,1 @@
-Created by the greatest, Ben Awad, executed by me
+Created by Ben Awad, executed by me
