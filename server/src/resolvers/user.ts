@@ -13,6 +13,7 @@ import argor2 from "argon2";
 import { COOKIE_NAME } from "../constants";
 import { UsernamePasswordInput } from "../utils/UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
+import { sendEmail } from "src/utils/sendEmail";
 
 @ObjectType()
 class FieldError {
@@ -51,7 +52,11 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(@Arg("email") email: string, @Ctx() { em }: MyContext) {
     const user = await em.findOne(User, { email });
-    return { user };
+    if (!user) {
+      return true;
+    }
+    await sendEmail(email, "");
+    return true;
   }
 
   @Mutation(() => UserResponse)
