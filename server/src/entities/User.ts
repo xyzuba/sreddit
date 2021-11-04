@@ -8,6 +8,14 @@ export class User {
   @PrimaryKey()
   id!: number;
 
+  @Field()
+  @Property({ type: "text", unique: true })
+  username!: string;
+
+  @Field()
+  @Property({ type: "text", unique: true })
+  email!: string;
+
   @Field(() => String)
   @Property({ type: "date" })
   createdAt = new Date();
@@ -16,10 +24,6 @@ export class User {
   @Property({ type: "date", onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @Field()
-  @Property({ type: "text", unique: true })
-  username: string;
-
   @Property({ type: "text" })
-  password: string;
+  password!: string;
 }
