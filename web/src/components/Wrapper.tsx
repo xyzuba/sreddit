@@ -15,7 +15,6 @@ export const Wrapper: React.FC<WrapperProps> = ({
       w="100%"
       mx="auto"
       mt={8}
-      bgColor="lightgrey"
     >
       {children}
     </Box>
