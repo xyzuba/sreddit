@@ -9,12 +9,12 @@ import { buildSchema } from "type-graphql";
 import { HelpResolver } from "./resolvers/help";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import redis from "redis";
+import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import { MyContext } from "./types";
+// import { MyContext } from "./types";
 // import { User } from "./entities/User";
 // import { sendEmail } from "./utils/sendEmail";
 
@@ -25,13 +25,13 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redis = new Redis();
 
   app.use(
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis as any,
         disableTouch: true,
       }),
       cookie: {
@@ -58,8 +58,7 @@ const main = async () => {
       resolvers: [HelpResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext =>
-      ({ em: orm.em, req, res } as MyContext),
+    context: ({ req, res }) => ({ em: orm.em, req, res, redis }),
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
   });
 
