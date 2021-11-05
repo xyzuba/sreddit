@@ -9,11 +9,14 @@ import {
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { cacheExchange } from "@urql/exchange-graphcache";
 
-export const createUrqlClient = (ssrExchange: any) => ({
+export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
   url: "http://localhost:4000/graphql",
-  fetchOptions: {
+  fetchOptions: () => ({
     credentials: "include" as const,
-  },
+    headers: {
+      cookie: ctx && ctx.req ? ctx.req.headers.cookie : document.cookie,
+    },
+  }),
   exchanges: [
     dedupExchange,
     cacheExchange({
