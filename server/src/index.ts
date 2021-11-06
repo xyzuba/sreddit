@@ -1,26 +1,30 @@
-import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
-import { COOKIE_NAME, __prod__ } from "./constants";
-// import { Post } from "./entities/Post";
-import mikroConfig from "./mikro-orm.config";
-import express from "express";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
+import connectRedis from "connect-redis";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import Redis from "ioredis";
+import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
+import { COOKIE_NAME, __prod__ } from "./constants";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
 import { HelpResolver } from "./resolvers/help";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import Redis from "ioredis";
-import session from "express-session";
-import connectRedis from "connect-redis";
-import cors from "cors";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-// import { MyContext } from "./types";
-// import { User } from "./entities/User";
-// import { sendEmail } from "./utils/sendEmail";
 
 const main = async () => {
-  const orm = await MikroORM.init(mikroConfig);
-  await orm.getMigrator().up();
+  const conn = await createConnection({
+    type: "postgres",
+    database: "sreddit",
+    username: "postgres",
+    password: "postgres",
+    logging: true,
+    synchronize: true,
+    entities: [Post, User],
+  });
 
   const app = express();
 
@@ -58,13 +62,9 @@ const main = async () => {
       resolvers: [HelpResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }) => ({ req, res, redis }),
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
   });
-
-  // app.get("/", (_, res) => {
-  //   res.send("help");
-  // });
 
   await apolloServer.start();
   apolloServer.applyMiddleware({
@@ -75,12 +75,6 @@ const main = async () => {
   app.listen(4000, () => {
     console.log("server started at localhost:4000");
   });
-
-  // const post = orm.em.create(Post, { title: "first post" });
-  // await orm.em.persistAndFlush(post);
-
-  // const posts = await orm.em.find(Post, {});
-  // console.log(posts);
 };
 
 main().catch((err) => {
