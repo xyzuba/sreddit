@@ -13,6 +13,8 @@ import {
 } from "type-graphql";
 import { Post } from "../entities/Post";
 
+import { getConnection } from "typeorm";
+
 // const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 @InputType()
@@ -26,9 +28,22 @@ class PostInput {
 @Resolver()
 export class PostResolver {
   @Query(() => [Post])
-  posts(): Promise<Post[]> {
-    // await sleep(4000);
-    return Post.find();
+  async posts(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string
+  ): Promise<Post[]> {
+    const realLimit = Math.min(50, limit);
+    const qb = getConnection()
+      .getRepository(Post)
+      .createQueryBuilder("p")
+      .orderBy('"createdAt"', "DESC")
+      .take(realLimit);
+
+    if (cursor) {
+      qb.where('"createdAt" < :cursor', { cursor: new Date(parseInt(cursor)) });
+    }
+
+    return qb.getMany();
   }
 
   @Query(() => Post, { nullable: true })
