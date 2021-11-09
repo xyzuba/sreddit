@@ -10,11 +10,12 @@ import { useRouter } from "next/dist/client/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from "next/link";
-import { route } from "next/dist/server/router";
+// import { route } from "next/dist/server/router";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
+  console.log(router);
   return (
     <Wrapper variant="small">
       <Formik

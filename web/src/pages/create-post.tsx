@@ -14,6 +14,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
   useIsAuth();
   const [, createPost] = useCreatePostMutation();
+  console.log(router);
   return (
     <Layout variant="small">
       <Formik

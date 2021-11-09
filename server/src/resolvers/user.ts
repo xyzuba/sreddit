@@ -4,10 +4,12 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
 } from "type-graphql";
 import argor2 from "argon2";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
@@ -30,11 +32,12 @@ class FieldError {
 class UserResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
+
   @Field(() => User, { nullable: true })
   user?: User;
 }
 
-Resolver();
+Resolver(User);
 export class UserResolver {
   @Query(() => [User])
   users(): Promise<User[]> {
