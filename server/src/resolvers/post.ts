@@ -1,5 +1,3 @@
-import { isAuth } from "../middlewear/isAuth";
-import { MyContext } from "../types";
 import {
   Arg,
   Ctx,
@@ -14,10 +12,10 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { Post } from "../entities/Post";
-
 import { getConnection } from "typeorm";
-import { Upvote } from "../entities/Upvote";
+import { Post } from "../entities/Post";
+import { isAuth } from "../middlewear/isAuth";
+import { MyContext } from "../types";
 
 // const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
