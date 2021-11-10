@@ -1,4 +1,3 @@
-import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -7,13 +6,10 @@ import {
   Link,
   Stack,
   Text,
-  Icon,
-  IconButton,
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { UpvoteSec } from "../components/UpvoteSec";
 import { usePostsQuery } from "../generated/graphql";
@@ -48,7 +44,13 @@ const Index = () => {
         //<Flex>
         <Stack spacing={8} mb={8}>
           {data!.posts.posts.map((p) => (
-            <Flex>
+            <Flex
+              bgColor="#2A2A32"
+              _hover={{
+                backgroundColor: "#404048",
+                borderRadius: "10px",
+              }}
+            >
               <UpvoteSec post={p} />
               <Box
                 pos="relative"
@@ -60,7 +62,11 @@ const Index = () => {
                 w="100%"
               >
                 <Flex justifyContent="space-between">
-                  <Heading fontSize={25}>{p.title}</Heading>
+                  <NextLink href="post/[id]" as={`post/${p.id}`}>
+                    <Link>
+                      <Heading fontSize={25}>{p.title}</Heading>
+                    </Link>
+                  </NextLink>
                   <Flex>
                     <Text
                       alignSelf="flex-end"

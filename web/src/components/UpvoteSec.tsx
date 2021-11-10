@@ -1,11 +1,7 @@
-import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { Box, Flex, IconButton } from "@chakra-ui/react";
 import React from "react";
-import {
-  PostSnippetFragment,
-  PostsQuery,
-  useVoteMutation,
-} from "../generated/graphql";
+import { PostSnippetFragment, useVoteMutation } from "../generated/graphql";
 
 interface UpvoteSecProps {
   post: PostSnippetFragment;
@@ -25,7 +21,7 @@ export const UpvoteSec: React.FC<UpvoteSecProps> = ({ post }) => {
     >
       <IconButton
         aria-label="upvote"
-        variant={post.voteStatus === 1 ? "solid" : "unstyled"}
+        variant={post.voteStatus === 1 ? "solid" : "ghost"}
         fontSize="lg"
         onClick={() => {
           if (post.voteStatus === 1) {
@@ -42,7 +38,7 @@ export const UpvoteSec: React.FC<UpvoteSecProps> = ({ post }) => {
       <Box>{post.points}</Box>
       <IconButton
         aria-label="downvote"
-        variant={post.voteStatus === -1 ? "solid" : "unstyled"}
+        variant={post.voteStatus === -1 ? "solid" : "ghost"}
         fontSize="lg"
         onClick={() => {
           if (post.voteStatus === -1) {
