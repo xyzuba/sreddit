@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import { userInfo } from "node:os";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { UpvoteSec } from "../components/UpvoteSec";
