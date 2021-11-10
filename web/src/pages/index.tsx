@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
+import { userInfo } from "node:os";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { UpvoteSec } from "../components/UpvoteSec";
@@ -29,8 +30,6 @@ const Index = () => {
 
   return (
     <Layout>
-      <Flex></Flex>
-      <br />
       {fetching && !data ? (
         <div>loading...</div>
       ) : (
@@ -72,6 +71,9 @@ const Index = () => {
                     <Text fontSize={18} alignSelf="flex-end">
                       {p.author.username}
                     </Text>
+                    <Link pos="absolute" color="gray" bottom={3} right={5}>
+                      delete post
+                    </Link>
                   </Flex>
                 </Flex>
                 <Text mt={4} fontSize={20}>
