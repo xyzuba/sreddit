@@ -1,3 +1,4 @@
+import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,12 +7,15 @@ import {
   Link,
   Stack,
   Text,
+  Icon,
+  IconButton,
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React from "react";
 import { useState } from "react";
 import { Layout } from "../components/Layout";
+import { UpvoteSec } from "../components/UpvoteSec";
 import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
@@ -41,22 +45,44 @@ const Index = () => {
       {fetching && !data ? (
         <div>loading...</div>
       ) : (
+        //<Flex>
         <Stack spacing={8} mb={8}>
           {data!.posts.posts.map((p) => (
-            <Box p={5} shadow="md" borderWidth="1px">
-              <Flex justifyContent="space-between">
-                <Heading fontSize="xl">{p.title}</Heading>
-                <Flex>
-                  <Text alignSelf="flex-end" fontSize={15} color="grey" mr={1}>
-                    posted by
-                  </Text>
-                  <Text fontSize={18}>{p.author.username}</Text>
+            <Flex>
+              <UpvoteSec post={p} />
+              <Box
+                pos="relative"
+                key={p.id}
+                p={5}
+                shadow="md"
+                borderWidth="1px"
+                borderRadius="0 10px 10px 0"
+                w="100%"
+              >
+                <Flex justifyContent="space-between">
+                  <Heading fontSize={25}>{p.title}</Heading>
+                  <Flex>
+                    <Text
+                      alignSelf="flex-end"
+                      fontSize={15}
+                      color="grey"
+                      mr={1}
+                    >
+                      posted by
+                    </Text>
+                    <Text fontSize={18} alignSelf="flex-end">
+                      {p.author.username}
+                    </Text>
+                  </Flex>
                 </Flex>
-              </Flex>
-              <Text mt={4}>{p.textSnippet}</Text>
-            </Box>
+                <Text mt={4} fontSize={20}>
+                  {p.textSnippet}
+                </Text>
+              </Box>
+            </Flex>
           ))}
         </Stack>
+        //</Flex>
       )}
       {data && data.posts.hasMore ? (
         <Flex>
