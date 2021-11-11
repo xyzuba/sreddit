@@ -4,17 +4,10 @@ import React from "react";
 import { Layout } from "../../components/Layout";
 import { usePostQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
+import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
 
 export const Post = ({}) => {
-  const router = useRouter();
-  const intId =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
-  const [{ data, fetching }] = usePostQuery({
-    pause: intId === -1,
-    variables: {
-      id: intId,
-    },
-  });
+  const [{ data, error, fetching }] = useGetConstFromUrl();
 
   if (fetching) {
     return (
@@ -22,6 +15,14 @@ export const Post = ({}) => {
         <div>loading...</div>
       </Layout>
     );
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  if (!data?.post) {
+    return <div>could not find post</div>;
   }
 
   return <Layout>{data?.post?.text}</Layout>;

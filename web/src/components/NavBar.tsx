@@ -16,12 +16,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     //user is not logged in
     body = (
       <>
-        <NextLink href="/login">
-          <Link mr={4}>login</Link>
-        </NextLink>
-        <NextLink href="/register">
-          <Link>register</Link>
-        </NextLink>
+        <Box>
+          <NextLink href="/login">
+            <Link mr={4}>login</Link>
+          </NextLink>
+          <NextLink href="/register">
+            <Link>register</Link>
+          </NextLink>
+        </Box>
       </>
     );
   } else {
@@ -52,6 +54,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         ml={"auto"}
         color="white"
         fontSize="xl"
+        alignItems="center"
       >
         <Flex alignItems="center">
           <NextLink href="/">
