@@ -1,8 +1,10 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
   Heading,
+  IconButton,
   Link,
   Stack,
   Text,
@@ -12,7 +14,7 @@ import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { UpvoteSec } from "../components/UpvoteSec";
-import { usePostsQuery } from "../generated/graphql";
+import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
@@ -20,6 +22,7 @@ const Index = () => {
     limit: 15,
     cursor: null as string | null,
   });
+  const [, deletePost] = useDeletePostMutation();
   const [{ data, fetching }] = usePostsQuery({
     variables,
   });
@@ -34,53 +37,66 @@ const Index = () => {
       ) : (
         //<Flex>
         <Stack spacing={8} mb={8}>
-          {data!.posts.posts.map((p) => (
-            <Flex
-              bgColor="#2A2A32"
-              _hover={{
-                backgroundColor: "#404048",
-                borderRadius: "10px",
-              }}
-            >
-              <UpvoteSec post={p} />
-              <Box
-                pos="relative"
-                key={p.id}
-                p={5}
-                shadow="md"
-                borderWidth="1px"
-                borderRadius="0 10px 10px 0"
-                w="100%"
+          {data!.posts.posts.map((p) =>
+            !p ? null : (
+              <Flex
+                bgColor="#2A2A35"
+                _hover={{
+                  backgroundColor: "#2e2e3b",
+                  borderRadius: "10px",
+                  transition: ".2s",
+                }}
               >
-                <Flex justifyContent="space-between">
-                  <NextLink href="post/[id]" as={`post/${p.id}`}>
-                    <Link>
-                      <Heading fontSize={25}>{p.title}</Heading>
-                    </Link>
-                  </NextLink>
-                  <Flex>
-                    <Text
-                      alignSelf="flex-end"
-                      fontSize={15}
-                      color="grey"
-                      mr={1}
-                    >
-                      posted by
-                    </Text>
-                    <Text fontSize={18} alignSelf="flex-end">
-                      {p.author.username}
-                    </Text>
-                    <Link pos="absolute" color="gray" bottom={3} right={5}>
-                      delete post
-                    </Link>
+                <UpvoteSec post={p} />
+                <Box
+                  pos="relative"
+                  key={p.id}
+                  p={5}
+                  shadow="md"
+                  borderWidth="1px"
+                  borderRadius="0 10px 10px 0"
+                  w="100%"
+                >
+                  <Flex justifyContent="space-between">
+                    <NextLink href="post/[id]" as={`post/${p.id}`}>
+                      <Link>
+                        <Heading fontSize={25}>{p.title}</Heading>
+                      </Link>
+                    </NextLink>
+                    <Flex>
+                      <Text
+                        alignSelf="flex-end"
+                        fontSize={15}
+                        color="grey"
+                        mr={1}
+                      >
+                        posted by
+                      </Text>
+                      <Text fontSize={18} alignSelf="flex-end">
+                        {p.author.username}
+                      </Text>
+                      <IconButton
+                        aria-label="delete post"
+                        pos="absolute"
+                        color="gray"
+                        bottom={3}
+                        right={5}
+                        icon={<DeleteIcon />}
+                        onClick={() => {
+                          deletePost({
+                            id: p.id,
+                          });
+                        }}
+                      />
+                    </Flex>
                   </Flex>
-                </Flex>
-                <Text mt={4} fontSize={20}>
-                  {p.textSnippet}
-                </Text>
-              </Box>
-            </Flex>
-          ))}
+                  <Text mt={4} fontSize={20}>
+                    {p.textSnippet}
+                  </Text>
+                </Box>
+              </Flex>
+            )
+          )}
         </Stack>
         //</Flex>
       )}
