@@ -45,12 +45,7 @@ const EditPost = ({}) => {
           <Form>
             <InputField name="title" placeholder="title" label="Title" />
             <Box mt={4}>
-              <InputField
-                textarea
-                name="text"
-                placeholder="text..."
-                label="Body"
-              />
+              <InputField textarea name="text" label="Body" />
             </Box>
 
             <Flex justifyContent="space-between">

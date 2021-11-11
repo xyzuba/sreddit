@@ -1,11 +1,13 @@
 import { Box, Heading } from "@chakra-ui/react";
+import { withUrqlClient } from "next-urql";
 import router from "next/router";
 import React from "react";
 import { EditDeleteCont } from "../../components/EditDeleteCont";
 import { Layout } from "../../components/Layout";
+import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
 
-export const Post = ({}) => {
+const Post = ({}) => {
   const [{ data, error, fetching }] = useGetConstFromUrl();
 
   if (fetching) {
@@ -26,12 +28,14 @@ export const Post = ({}) => {
 
   return (
     <Layout>
-      <Box p={5} shadow="md" borderWidth="1px" borderRadius="10px">
-        <Heading fontSize={35}> {data?.post?.title}</Heading>
+      <Box mb={1} p={7} shadow="md" borderWidth="1px" borderRadius="10px">
+        <Heading fontSize={35}> {data.post.title}</Heading>
         <br />
-        <Box fontSize={22}> {data?.post?.text}</Box>
+        <Box fontSize={22}> {data.post.text}</Box>
       </Box>
       <EditDeleteCont id={data.post.id} authorId={data.post.author.id} />
     </Layout>
   );
 };
+
+export default withUrqlClient(createUrqlClient)(Post as any);
