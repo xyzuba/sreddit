@@ -1,16 +1,26 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import router from "next/router";
 import React from "react";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout";
+import {
+  usePostQuery,
+  useUpdatePostMutation,
+} from "../../../generated/graphql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
-import { useGetConstFromUrl } from "../../../utils/useGetPostFromUrl";
-import createPost from "../../create-post";
+import { useGetIntId } from "../../../utils/useGetIntId";
 
 const EditPost = ({}) => {
-  const [{ data, fetching }] = useGetConstFromUrl();
+  const intId = useGetIntId();
+  const [{ data, fetching }] = usePostQuery({
+    pause: intId === -1,
+    variables: {
+      id: intId,
+    },
+  });
+  const [, updatePost] = useUpdatePostMutation();
 
   if (fetching) {
     return (
@@ -19,15 +29,16 @@ const EditPost = ({}) => {
       </Layout>
     );
   }
+  if (!data?.post) {
+    return <div>could not find post</div>;
+  }
   return (
     <Layout variant="small">
       <Formik
-        initialValues={{ title: data?.post?.title, text: data?.post?.text }}
+        initialValues={{ title: data.post.title, text: data.post.text }}
         onSubmit={async (values) => {
-          // const { error } = await updatePost({ input: values });
-          // if (!error) {
-          //   router.push("/");
-          // }
+          updatePost({ id: intId, ...values });
+          router.back();
         }}
       >
         {({ isSubmitting }) => (
@@ -49,7 +60,7 @@ const EditPost = ({}) => {
                 colorScheme="teal"
                 isLoading={isSubmitting}
               >
-                create post
+                update post
               </Button>
             </Flex>
           </Form>

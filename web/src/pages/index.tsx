@@ -1,10 +1,8 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
   Heading,
-  IconButton,
   Link,
   Stack,
   Text,
@@ -12,13 +10,10 @@ import {
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React, { useState } from "react";
+import { EditDeleteCont } from "../components/EditDeleteCont";
 import { Layout } from "../components/Layout";
 import { UpvoteSec } from "../components/UpvoteSec";
-import {
-  useDeletePostMutation,
-  useMeQuery,
-  usePostsQuery,
-} from "../generated/graphql";
+import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
@@ -26,8 +21,7 @@ const Index = () => {
     limit: 15,
     cursor: null as string | null,
   });
-  const [{ data: meData }] = useMeQuery();
-  const [, deletePost] = useDeletePostMutation();
+
   const [{ data, fetching }] = usePostsQuery({
     variables,
   });
@@ -94,42 +88,8 @@ const Index = () => {
                     pos="absolute"
                     right={0}
                     bottom={-9}
-                    // shadow="md"
-                    // borderWidth="0 1px 1px 1px"
-                    // borderRadius="0 0 10px 0"
-                    // bg="transparent"
                   >
-                    {meData?.me?.id !== p.author.id ? null : (
-                      <Box ml="auto" w="max-content">
-                        <NextLink
-                          href="/post/edit/[id]"
-                          as={`/post/edit/${p.id}`}
-                        >
-                          <IconButton
-                            size="sm"
-                            variant="ghost"
-                            mx={1}
-                            aria-label="edit post"
-                            color="grey"
-                            icon={<EditIcon />}
-                          />
-                        </NextLink>
-                        <IconButton
-                          // fontSize="sm"
-                          size="sm"
-                          variant="ghost"
-                          mx={1}
-                          aria-label="delete post"
-                          color="gray"
-                          icon={<DeleteIcon />}
-                          onClick={() => {
-                            deletePost({
-                              id: p.id,
-                            });
-                          }}
-                        />
-                      </Box>
-                    )}
+                    <EditDeleteCont id={p.id} authorId={p.author.id} />
                   </Flex>
                 </Flex>
               </Flex>

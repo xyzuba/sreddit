@@ -1,9 +1,8 @@
-import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
+import { Box, Heading } from "@chakra-ui/react";
+import router from "next/router";
 import React from "react";
+import { EditDeleteCont } from "../../components/EditDeleteCont";
 import { Layout } from "../../components/Layout";
-import { usePostQuery } from "../../generated/graphql";
-import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
 
 export const Post = ({}) => {
@@ -22,10 +21,17 @@ export const Post = ({}) => {
   }
 
   if (!data?.post) {
-    return <div>could not find post</div>;
+    return router.push("/");
   }
 
-  return <Layout>{data?.post?.text}</Layout>;
+  return (
+    <Layout>
+      <Box p={5} shadow="md" borderWidth="1px" borderRadius="10px">
+        <Heading fontSize={35}> {data?.post?.title}</Heading>
+        <br />
+        <Box fontSize={22}> {data?.post?.text}</Box>
+      </Box>
+      <EditDeleteCont id={data.post.id} authorId={data.post.author.id} />
+    </Layout>
+  );
 };
-
-export default withUrqlClient(createUrqlClient, { ssr: true })(Post);
