@@ -177,7 +177,7 @@ export class UserResolver {
           ],
         };
       }
-      console.log("message: " + err.message);
+      // console.log("message: " + err.message);
     }
 
     req.session.userId = user.id;
@@ -228,7 +228,7 @@ export class UserResolver {
       req.session.destroy((err) => {
         res.clearCookie(COOKIE_NAME);
         if (err) {
-          console.log(err);
+          // console.log(err);
           resolve(false);
           return;
         }

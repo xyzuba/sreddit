@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Link } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import router from "next/router";
 import React from "react";
@@ -6,6 +6,7 @@ import { EditDeleteCont } from "../../components/EditDeleteCont";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
+import NextLink from "next/link";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetConstFromUrl();
@@ -23,7 +24,14 @@ const Post = ({}) => {
   }
 
   if (!data?.post) {
-    return router.push("/");
+    return (
+      <Layout>
+        <Heading mb={5}>This post doesn't exist</Heading>
+        <NextLink href="/">
+          <Link>Go to the main page</Link>
+        </NextLink>
+      </Layout>
+    );
   }
 
   return (

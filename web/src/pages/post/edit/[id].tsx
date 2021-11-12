@@ -30,7 +30,7 @@ const EditPost = ({}) => {
     );
   }
   if (!data?.post) {
-    return <div>could not find post</div>;
+    return <div>post was deleted</div>;
   }
   return (
     <Layout variant="small">
