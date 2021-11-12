@@ -1,12 +1,11 @@
 import { Box, Heading, Link } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
-import router from "next/router";
+import NextLink from "next/link";
 import React from "react";
 import { EditDeleteCont } from "../../components/EditDeleteCont";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
-import NextLink from "next/link";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetConstFromUrl();
