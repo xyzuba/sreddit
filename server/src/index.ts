@@ -11,7 +11,7 @@ import { createConnection } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
-import { HelpResolver } from "./resolvers/help";
+import { PictureResolver } from "./resolvers/pfp";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import path from "path";
@@ -65,7 +65,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelpResolver, PostResolver, UserResolver],
+      resolvers: [PictureResolver, PostResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({

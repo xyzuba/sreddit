@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { SessionData, Session } from "express-session";
+import { Session, SessionData } from "express-session";
 import { Redis } from "ioredis";
+import { Stream } from "stream";
 import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 
@@ -12,4 +13,11 @@ export type MyContext = {
   redis: Redis;
   userLoader: ReturnType<typeof createUserLoader>;
   upvoteLoader: ReturnType<typeof createUpvoteLoader>;
+};
+
+export type File = {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  createReadStream: () => Stream;
 };
