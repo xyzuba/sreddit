@@ -17,6 +17,7 @@ import { getConnection } from "typeorm";
 import { Post } from "../entities/Post";
 import { isAuth } from "../middlewear/isAuth";
 import { MyContext } from "../types";
+import { User } from "../entities/User";
 
 // const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -39,10 +40,31 @@ class PaginatedPosts {
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => String)
-  textSnippet(@Root() root: Post) {
-    const snippet = root.text.split(" ").slice(0, 15).join(" ");
+  textSnippet(@Root() post: Post) {
+    const snippet = post.text.split(" ").slice(0, 15).join(" ");
     return snippet;
-    // return root.text.slice(0, 50);
+  }
+
+  @FieldResolver(() => User)
+  author(@Root() post: Post, @Ctx() { userLoader }: MyContext) {
+    return userLoader.load(post.authorId);
+  }
+
+  @FieldResolver(() => Int, { nullable: true })
+  async voteStatus(
+    @Root() post: Post,
+    @Ctx() { upvoteLoader, req }: MyContext
+  ) {
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const upvote = await upvoteLoader.load({
+      postId: post.id,
+      userId: req.session.userId,
+    });
+
+    return upvote ? upvote.value : null;
   }
 
   @Mutation(() => Boolean)
@@ -129,24 +151,17 @@ export class PostResolver {
       replacements.push(new Date(parseInt(cursor)));
       cursorIdx = replacements.length;
     }
-    //{cursorIdx}
+
     const posts = await getConnection().query(
       `
     select p.*,
-    json_build_object(
-      'id', u.id,
-      'username' , u.username,
-      'email', u.email,
-      'createdAt', u."createdAt",
-      'updatedAt', u."updatedAt"
-      ) author,
+    
       ${
         req.session.userId
           ? '(select value from upvote where "userId" = $2 and "postId" = p.id) "voteStatus"'
           : 'null as "voteStatus"'
       }
     from post p
-    inner join public.user u on u.id = p."authorId"
     ${cursor ? `where p."createdAt" < $${cursorIdx}` : ""}
     order by p."createdAt" DESC
     limit $1
@@ -177,7 +192,7 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    return Post.findOne(id, { relations: ["author"] });
+    return Post.findOne(id);
   }
 
   @Mutation(() => Post)
