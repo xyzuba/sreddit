@@ -1,4 +1,3 @@
-import { GraphQLUpload, Upload } from "graphql-upload";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -26,10 +25,6 @@ export class User extends BaseEntity {
   @Field()
   @Column({ unique: true })
   email!: string;
-
-  @Field()
-  @Column(() => GraphQLUpload, { nullable: true })
-  picture: string;
 
   @Column()
   password!: string;
