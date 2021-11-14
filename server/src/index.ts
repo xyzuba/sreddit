@@ -18,6 +18,7 @@ import path from "path";
 import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
 import { createUpvoteLoader } from "./utils/createUpvoteLoader";
+import { graphqlUploadExpress } from "graphql-upload";
 
 const main = async () => {
   const conn = await createConnection({
@@ -77,6 +78,8 @@ const main = async () => {
     }),
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
   });
+
+  app.use(graphqlUploadExpress());
 
   await apolloServer.start();
   apolloServer.applyMiddleware({
