@@ -49,7 +49,6 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreatePostArgs = {
-  img?: Maybe<Scalars['Upload']>;
   input: PostInput;
 };
 
@@ -99,7 +98,6 @@ export type Post = {
   authorId: Scalars['Float'];
   createdAt: Scalars['String'];
   id: Scalars['Float'];
-  picture: Scalars['String'];
   points: Scalars['Float'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -238,7 +236,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, picture: string, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -403,7 +401,6 @@ export const PostDocument = gql`
     id
     title
     text
-    picture
     points
     voteStatus
     createdAt

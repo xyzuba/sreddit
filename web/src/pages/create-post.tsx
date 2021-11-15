@@ -14,7 +14,6 @@ const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
   useIsAuth();
   const [, createPost] = useCreatePostMutation();
-  console.log(router);
   return (
     <Layout variant="small">
       <Formik
@@ -37,7 +36,6 @@ const CreatePost: React.FC<{}> = ({}) => {
                 label="Body"
               />
             </Box>
-
             <Flex justifyContent="space-between">
               <Button
                 mt={4}

@@ -202,30 +202,30 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async createPost(
     @Arg("input") input: PostInput,
-    @Arg("img", () => GraphQLUpload, { nullable: true })
-    { createReadStream, filename }: File,
+    // @Arg("img", () => GraphQLUpload, { nullable: true })
+    // { createReadStream, filename }: File,
     @Ctx() { req }: MyContext
   ): Promise<Post> {
-    let imgUrl = "";
-    await new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(
-          createWriteStream(
-            `/Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`
-            //file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}
-          )
-        )
-        .on("open", resolve)
-        .on("finish", () => {
-          imgUrl = `//file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`;
-          // Post.insert(imgUrl);
-        })
-        .on("error", reject)
-    );
+    // let imgUrl = "";
+    // await new Promise(async (resolve, reject) =>
+    //   createReadStream()
+    //     .pipe(
+    //       createWriteStream(
+    //         `/Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`
+    //         //file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}
+    //       )
+    //     )
+    //     .on("open", resolve)
+    //     .on("finish", () => {
+    //       imgUrl = `//file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`;
+    //       // Post.insert(imgUrl);
+    //     })
+    //     .on("error", reject)
+    // );
     return Post.create({
       ...input,
       authorId: req.session.userId,
-      picture: imgUrl,
+      // picture: imgUrl,
     }).save();
   }
 
