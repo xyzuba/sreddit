@@ -1,12 +1,11 @@
-fragment PostSnippet on Post {
+fragment RegularPost on Post {
   id
   title
+  text
   points
+  voteStatus
   createdAt
   updatedAt
-  textSnippet
-  text
-  voteStatus
   author {
     id
     username

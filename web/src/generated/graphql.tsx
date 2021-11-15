@@ -152,9 +152,11 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
+
+export type RegularPostFragment = { __typename?: 'Post', id: number, title: string, text: string, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } };
 
 export type RegularUserFragment = { __typename?: 'User', id: number, username: string };
 
@@ -244,7 +246,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> } };
 
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on Post {
@@ -254,7 +256,23 @@ export const PostSnippetFragmentDoc = gql`
   createdAt
   updatedAt
   textSnippet
+  text
   voteStatus
+  author {
+    id
+    username
+  }
+}
+    `;
+export const RegularPostFragmentDoc = gql`
+    fragment RegularPost on Post {
+  id
+  title
+  text
+  points
+  voteStatus
+  createdAt
+  updatedAt
   author {
     id
     username

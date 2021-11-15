@@ -1,8 +1,9 @@
-import { Box, Heading, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React from "react";
 import { EditDeleteCont } from "../../components/EditDeleteCont";
+import { FullUpvoteSec } from "../../components/FullUpvoteSec";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
@@ -35,11 +36,14 @@ const Post = ({}) => {
 
   return (
     <Layout>
-      <Box mb={1} p={7} shadow="md" borderWidth="1px" borderRadius="10px">
-        <Heading fontSize={35}> {data.post.title}</Heading>
-        <br />
-        <Box fontSize={22}> {data.post.text}</Box>
-      </Box>
+      <Flex flexDirection="row" mb={2}>
+        <FullUpvoteSec post={data.post} />
+        <Box p={7} shadow="md" borderWidth="1px" borderRadius="0 10px 10px 0">
+          <Heading fontSize={35}> {data.post.title}</Heading>
+          <br />
+          <Box fontSize={22}> {data.post.text}</Box>
+        </Box>
+      </Flex>
       <EditDeleteCont id={data.post.id} authorId={data.post.author.id} />
     </Layout>
   );

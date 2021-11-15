@@ -1,4 +1,3 @@
-import { Upvote } from "../entities/Upvote";
 import {
   Arg,
   Ctx,
@@ -15,12 +14,10 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { Post } from "../entities/Post";
+import { Upvote } from "../entities/Upvote";
+import { User } from "../entities/User";
 import { isAuth } from "../middlewear/isAuth";
 import { MyContext } from "../types";
-import { User } from "../entities/User";
-import { createWriteStream } from "fs";
-import { File } from "../types";
-import { GraphQLUpload } from "graphql-upload";
 
 // const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -44,7 +41,7 @@ class PaginatedPosts {
 export class PostResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() post: Post) {
-    const snippet = post.text.split(" ").slice(0, 15).join(" ");
+    const snippet = post.text.split(" ").slice(0, 25).join(" ");
     return snippet;
   }
 
