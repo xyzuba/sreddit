@@ -9,7 +9,7 @@ export class PictureResolver {
   async addPicture(
     @Arg("picture", () => GraphQLUpload) { filename, createReadStream }: File
   ): Promise<boolean> {
-    let imgUrl;
+    let imgUrl = "";
     return new Promise(async (resolve, reject) =>
       createReadStream()
         .pipe(

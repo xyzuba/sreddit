@@ -18,6 +18,9 @@ import { Post } from "../entities/Post";
 import { isAuth } from "../middlewear/isAuth";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
+import { createWriteStream } from "fs";
+import { File } from "../types";
+import { GraphQLUpload } from "graphql-upload";
 
 // const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -199,11 +202,30 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async createPost(
     @Arg("input") input: PostInput,
+    @Arg("img", () => GraphQLUpload, { nullable: true })
+    { createReadStream, filename }: File,
     @Ctx() { req }: MyContext
   ): Promise<Post> {
+    let imgUrl = "";
+    await new Promise(async (resolve, reject) =>
+      createReadStream()
+        .pipe(
+          createWriteStream(
+            `/Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`
+            //file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}
+          )
+        )
+        .on("open", resolve)
+        .on("finish", () => {
+          imgUrl = `//file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`;
+          // Post.insert(imgUrl);
+        })
+        .on("error", reject)
+    );
     return Post.create({
       ...input,
       authorId: req.session.userId,
+      picture: imgUrl,
     }).save();
   }
 

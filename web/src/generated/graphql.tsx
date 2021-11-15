@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type FieldError = {
@@ -22,6 +24,7 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addPicture: Scalars['Boolean'];
   changePassword: UserResponse;
   createPost: Post;
   deletePost: Scalars['Boolean'];
@@ -34,6 +37,11 @@ export type Mutation = {
 };
 
 
+export type MutationAddPictureArgs = {
+  picture: Scalars['Upload'];
+};
+
+
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
@@ -41,6 +49,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreatePostArgs = {
+  img?: Maybe<Scalars['Upload']>;
   input: PostInput;
 };
 
@@ -90,6 +99,7 @@ export type Post = {
   authorId: Scalars['Float'];
   createdAt: Scalars['String'];
   id: Scalars['Float'];
+  picture: Scalars['String'];
   points: Scalars['Float'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -105,7 +115,6 @@ export type PostInput = {
 
 export type Query = {
   __typename?: 'Query';
-  help: Scalars['String'];
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: PaginatedPosts;
@@ -141,6 +150,7 @@ export type UserResponse = {
 export type UsernamePasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+  picture?: Maybe<Scalars['Upload']>;
   username: Scalars['String'];
 };
 
@@ -228,7 +238,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, picture: string, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -393,6 +403,7 @@ export const PostDocument = gql`
     id
     title
     text
+    picture
     points
     voteStatus
     createdAt
