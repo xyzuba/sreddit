@@ -116,6 +116,7 @@ export type Query = {
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: PaginatedPosts;
+  user?: Maybe<User>;
   users: Array<User>;
 };
 
@@ -128,6 +129,11 @@ export type QueryPostArgs = {
 export type QueryPostsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['Int'];
 };
 
 export type User = {
@@ -247,6 +253,18 @@ export type PostsQueryVariables = Exact<{
 
 
 export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> } };
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: string } | null | undefined };
+
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, username: string }> };
 
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on Post {
@@ -447,4 +465,30 @@ export const PostsDocument = gql`
 
 export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });
+};
+export const UserDocument = gql`
+    query User($id: Int!) {
+  user(id: $id) {
+    id
+    username
+    email
+    createdAt
+  }
+}
+    `;
+
+export function useUserQuery(options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UserQuery>({ query: UserDocument, ...options });
+};
+export const UsersDocument = gql`
+    query Users {
+  users {
+    id
+    username
+  }
+}
+    `;
+
+export function useUsersQuery(options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 };

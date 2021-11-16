@@ -135,6 +135,7 @@ export class PostResolver {
   async posts(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string,
+    // @Arg("authorId", () => Int, { nullable: true }) authorId: string,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
@@ -168,21 +169,6 @@ export class PostResolver {
    `,
       replacements
     );
-
-    // const qb = getConnection()
-    //   .getRepository(Post)
-    //   .createQueryBuilder("p")
-    //   .innerJoinAndSelect("p.author", "u", 'u.id = p."authorId"')
-    //   .orderBy('p."createdAt"', "DESC")
-    //   .take(realLimitPlus);
-
-    // // if (cursor) {
-    //   qb.where('p."createdAt" < :cursor', {
-    //     cursor: new Date(parseInt(cursor)),
-    //   });
-    // }
-
-    // const posts = await qb.getMany();
 
     return {
       posts: posts.slice(0, realLimit),
