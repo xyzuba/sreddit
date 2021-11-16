@@ -38,7 +38,13 @@ const Post = ({}) => {
     <Layout>
       <Flex flexDirection="row" mb={2}>
         <FullUpvoteSec post={data.post} />
-        <Box p={7} shadow="md" borderWidth="1px" borderRadius="0 10px 10px 0">
+        <Box
+          p={7}
+          shadow="md"
+          borderWidth="1px"
+          borderRadius="0 10px 10px 0"
+          width="100%"
+        >
           <Heading fontSize={35}> {data.post.title}</Heading>
           <br />
           <Box fontSize={22}> {data.post.text}</Box>

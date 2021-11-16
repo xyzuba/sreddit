@@ -74,9 +74,11 @@ const Index = () => {
                         >
                           posted by
                         </Text>
-                        <Text fontSize={18} alignSelf="flex-end">
-                          {p.author.username}
-                        </Text>
+                        <NextLink href="user/[id]" as={`user/${p.author.id}`}>
+                          <Link fontSize={18} alignSelf="flex-end">
+                            {p.author.username}
+                          </Link>
+                        </NextLink>
                       </Flex>
                     </Flex>
                     <Text mt={4} fontSize={20}>
