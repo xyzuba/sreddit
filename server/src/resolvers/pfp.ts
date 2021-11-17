@@ -6,9 +6,10 @@ import { createWriteStream } from "fs";
 @Resolver()
 export class PictureResolver {
   @Mutation(() => Boolean)
-  async addPicture(
+  async uploadPicture(
     @Arg("picture", () => GraphQLUpload) { filename, createReadStream }: File
   ): Promise<boolean> {
+    //@ts-ignore
     let imgUrl = "";
     return new Promise(async (resolve, reject) =>
       createReadStream()

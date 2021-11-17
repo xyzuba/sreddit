@@ -78,6 +78,15 @@ const invalidateAllPosts = (cache: Cache) => {
     cache.invalidate("Query", "posts", fi.arguments);
   });
 };
+const invalidateAllFiltPosts = (cache: Cache) => {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter(
+    (info) => info.fieldName === "filteredPosts"
+  );
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "filteredPosts", fi.arguments);
+  });
+};
 
 export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
   url: "http://localhost:4000/graphql",
@@ -137,6 +146,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
           },
           createPost: (_result, args, cache, info) => {
             invalidateAllPosts(cache);
+            invalidateAllFiltPosts(cache);
           },
           logout: (_result, args, cache, info) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(
@@ -164,6 +174,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => ({
               }
             );
             invalidateAllPosts(cache);
+            invalidateAllFiltPosts(cache);
           },
           register: (_result, args, cache, info) => {
             betterUpdateQuery<RegisterMutation, MeQuery>(

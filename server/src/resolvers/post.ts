@@ -37,6 +37,12 @@ class PaginatedPosts {
   hasMore: boolean;
 }
 
+@ObjectType()
+class FilteredPosts {
+  @Field(() => [Post], { nullable: true })
+  posts: Post[];
+}
+
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => String)
@@ -130,11 +136,31 @@ export class PostResolver {
 
     return true;
   }
+  //@Arg("id", () => Int) id: number
+  @Query(() => FilteredPosts, { nullable: true })
+  async filteredPosts(
+    @Arg("id", () => Int) id: number
+  ): Promise<FilteredPosts> {
+    const posts = await Post.find({
+      where: { authorId: id },
+      order: { createdAt: "DESC" },
+    });
+    return { posts };
+    // const posts = getConnection().query(
+    //   `
+    //   select p.*
+    //   from post as p
+    //   where p."authorId" = ${authorId}
+    //   `
+    // );
+    // return posts;
+  }
 
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string,
+    @Arg("id", () => Int, { nullable: true }) id: number,
     @Ctx() { req }: MyContext
   ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
@@ -152,6 +178,10 @@ export class PostResolver {
       cursorIdx = replacements.length;
     }
 
+    if (id) {
+      replacements.push(id);
+    }
+
     const posts = await getConnection().query(
       `
     select p.*,
@@ -163,6 +193,7 @@ export class PostResolver {
       }
     from post p
     ${cursor ? `where p."createdAt" < $${cursorIdx}` : ""}
+    ${id ? `where p."authorId" = $3` : ""}
     order by p."createdAt" DESC
     limit $1
    `,
@@ -184,30 +215,11 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async createPost(
     @Arg("input") input: PostInput,
-    // @Arg("img", () => GraphQLUpload, { nullable: true })
-    // { createReadStream, filename }: File,
     @Ctx() { req }: MyContext
   ): Promise<Post> {
-    // let imgUrl = "";
-    // await new Promise(async (resolve, reject) =>
-    //   createReadStream()
-    //     .pipe(
-    //       createWriteStream(
-    //         `/Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`
-    //         //file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}
-    //       )
-    //     )
-    //     .on("open", resolve)
-    //     .on("finish", () => {
-    //       imgUrl = `//file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`;
-    //       // Post.insert(imgUrl);
-    //     })
-    //     .on("error", reject)
-    // );
     return Post.create({
       ...input,
       authorId: req.session.userId,
-      // picture: imgUrl,
     }).save();
   }
 

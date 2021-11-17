@@ -22,6 +22,11 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type FilteredPosts = {
+  __typename?: 'FilteredPosts';
+  posts?: Maybe<Array<Post>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addPicture: Scalars['Boolean'];
@@ -113,11 +118,17 @@ export type PostInput = {
 
 export type Query = {
   __typename?: 'Query';
+  filteredPosts?: Maybe<FilteredPosts>;
   me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: PaginatedPosts;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryFilteredPostsArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -128,6 +139,7 @@ export type QueryPostArgs = {
 
 export type QueryPostsArgs = {
   cursor?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
 };
 
@@ -141,6 +153,7 @@ export type User = {
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['Float'];
+  posts?: Maybe<Array<Post>>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -234,6 +247,13 @@ export type VoteMutationVariables = Exact<{
 
 export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
 
+export type FilteredPostsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FilteredPostsQuery = { __typename?: 'Query', filteredPosts?: { __typename?: 'FilteredPosts', posts?: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> | null | undefined } | null | undefined };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -249,6 +269,7 @@ export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -420,6 +441,19 @@ export const VoteDocument = gql`
 export function useVoteMutation() {
   return Urql.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument);
 };
+export const FilteredPostsDocument = gql`
+    query FilteredPosts($id: Int!) {
+  filteredPosts(id: $id) {
+    posts {
+      ...PostSnippet
+    }
+  }
+}
+    ${PostSnippetFragmentDoc}`;
+
+export function useFilteredPostsQuery(options: Omit<Urql.UseQueryArgs<FilteredPostsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FilteredPostsQuery>({ query: FilteredPostsDocument, ...options });
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -453,8 +487,8 @@ export function usePostQuery(options: Omit<Urql.UseQueryArgs<PostQueryVariables>
   return Urql.useQuery<PostQuery>({ query: PostDocument, ...options });
 };
 export const PostsDocument = gql`
-    query Posts($limit: Int!, $cursor: String) {
-  posts(cursor: $cursor, limit: $limit) {
+    query Posts($limit: Int!, $cursor: String, $id: Int) {
+  posts(cursor: $cursor, limit: $limit, id: $id) {
     hasMore
     posts {
       ...PostSnippet

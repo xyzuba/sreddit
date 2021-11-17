@@ -1,0 +1,7 @@
+query FilteredPosts($id: Int!) {
+  filteredPosts(id: $id) {
+    posts {
+      ...PostSnippet
+    }
+  }
+}
