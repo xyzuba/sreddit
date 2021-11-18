@@ -29,7 +29,6 @@ export type FilteredPosts = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addPicture: Scalars['Boolean'];
   changePassword: UserResponse;
   createPost: Post;
   deletePost: Scalars['Boolean'];
@@ -38,12 +37,8 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   register: UserResponse;
   updatePost?: Maybe<Post>;
+  uploadPicture: Scalars['Boolean'];
   vote: Scalars['Boolean'];
-};
-
-
-export type MutationAddPictureArgs = {
-  picture: Scalars['Upload'];
 };
 
 
@@ -54,6 +49,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreatePostArgs = {
+  img?: Maybe<Scalars['String']>;
   input: PostInput;
 };
 
@@ -86,6 +82,11 @@ export type MutationUpdatePostArgs = {
 };
 
 
+export type MutationUploadPictureArgs = {
+  picture: Scalars['Upload'];
+};
+
+
 export type MutationVoteArgs = {
   postId: Scalars['Int'];
   value: Scalars['Int'];
@@ -103,6 +104,7 @@ export type Post = {
   authorId: Scalars['Float'];
   createdAt: Scalars['String'];
   id: Scalars['Float'];
+  picture?: Maybe<Scalars['String']>;
   points: Scalars['Float'];
   text: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -191,10 +193,11 @@ export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: 
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
+  img?: Maybe<Scalars['String']>;
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, points: number, authorId: number, createdAt: string, updatedAt: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, points: number, picture?: string | null | undefined, authorId: number, createdAt: string, updatedAt: string } };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -264,7 +267,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, picture?: string | null | undefined, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -353,12 +356,13 @@ export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
 };
 export const CreatePostDocument = gql`
-    mutation CreatePost($input: PostInput!) {
-  createPost(input: $input) {
+    mutation CreatePost($input: PostInput!, $img: String) {
+  createPost(input: $input, img: $img) {
     id
     title
     text
     points
+    picture
     authorId
     createdAt
     updatedAt
@@ -471,6 +475,7 @@ export const PostDocument = gql`
     id
     title
     text
+    picture
     points
     voteStatus
     createdAt

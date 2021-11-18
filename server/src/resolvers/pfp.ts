@@ -9,14 +9,19 @@ export class PictureResolver {
   async uploadPicture(
     @Arg("picture", () => GraphQLUpload) { filename, createReadStream }: File
   ): Promise<boolean> {
-    //@ts-ignore
+    // const uploadPic = (files) => {
+    //   const formData = new FormData();
+    //   formData.append("file", files[0]);
+    //   formData.append("upload-preset", uploadPreset);
+    // };
+
     let imgUrl = "";
     return new Promise(async (resolve, reject) =>
       createReadStream()
         .pipe(
           createWriteStream(
-            `/Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}`
-            //file:///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}
+            `https://api.cloudinary.com/v1_1//image/upload`
+            ///Volumes/flash/waiting/sreddit/sreddit/server/images/${filename}
           )
         )
         .on("open", resolve)

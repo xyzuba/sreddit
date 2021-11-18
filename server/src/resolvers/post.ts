@@ -215,11 +215,13 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async createPost(
     @Arg("input") input: PostInput,
+    @Arg("img", { nullable: true }) img: string,
     @Ctx() { req }: MyContext
   ): Promise<Post> {
     return Post.create({
       ...input,
       authorId: req.session.userId,
+      picture: img,
     }).save();
   }
 

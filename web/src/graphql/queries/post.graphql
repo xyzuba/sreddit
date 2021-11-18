@@ -3,6 +3,7 @@ query Post($id: Int!) {
     id
     title
     text
+    picture
     points
     voteStatus
     createdAt

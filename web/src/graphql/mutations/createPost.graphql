@@ -1,9 +1,10 @@
-mutation CreatePost($input: PostInput!) {
-  createPost(input: $input) {
+mutation CreatePost($input: PostInput!, $img: String) {
+  createPost(input: $input, img: $img) {
     id
     title
     text
     points
+    picture
     authorId
     createdAt
     updatedAt

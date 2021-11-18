@@ -7,6 +7,8 @@ import { FullUpvoteSec } from "../../components/FullUpvoteSec";
 import { Layout } from "../../components/Layout";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetConstFromUrl } from "../../utils/useGetPostFromUrl";
+//@ts-ignore
+import { Image } from "cloudinary-react";
 
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetConstFromUrl();
@@ -48,6 +50,11 @@ const Post = ({}) => {
           <Heading fontSize={35}> {data.post.title}</Heading>
           <br />
           <Box fontSize={22}> {data.post.text}</Box>
+          <Image
+            cloudName={"sreddit-yehor"}
+            publicId={data.post.picture}
+            width="max-content"
+          />
         </Box>
       </Flex>
       <EditDeleteCont id={data.post.id} authorId={data.post.author.id} />
