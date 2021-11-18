@@ -49,7 +49,9 @@ const Post = ({}) => {
         >
           <Heading fontSize={35}> {data.post.title}</Heading>
           <br />
-          <Box fontSize={22}> {data.post.text}</Box>
+          <Box fontSize={22} mb={2}>
+            {data.post.text}
+          </Box>
           <Image
             cloudName={"sreddit-yehor"}
             publicId={data.post.picture}
