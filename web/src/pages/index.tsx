@@ -4,6 +4,7 @@ import {
   Flex,
   Heading,
   Link,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -32,7 +33,7 @@ const Index = () => {
   return (
     <Layout>
       {fetching && !data ? (
-        <div>loading...</div>
+        <Spinner />
       ) : (
         //<Flex>
         <Stack spacing={12} mb={8}>

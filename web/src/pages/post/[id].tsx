@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link, Spinner } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import React from "react";
@@ -16,7 +16,9 @@ const Post = ({}) => {
   if (fetching) {
     return (
       <Layout>
-        <div>loading...</div>
+        <Flex justifyContent="center">
+          <Spinner />
+        </Flex>
       </Layout>
     );
   }
