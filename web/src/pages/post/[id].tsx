@@ -64,4 +64,4 @@ const Post = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Post as any);
+export default withUrqlClient(createUrqlClient)(Post);

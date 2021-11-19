@@ -173,7 +173,7 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, picture?: string | null | undefined, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -255,7 +255,7 @@ export type FilteredPostsQueryVariables = Exact<{
 }>;
 
 
-export type FilteredPostsQuery = { __typename?: 'Query', filteredPosts?: { __typename?: 'FilteredPosts', posts?: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> | null | undefined } | null | undefined };
+export type FilteredPostsQuery = { __typename?: 'Query', filteredPosts?: { __typename?: 'FilteredPosts', posts?: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, picture?: string | null | undefined, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> | null | undefined } | null | undefined };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -267,7 +267,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, picture?: string | null | undefined, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
+export type PostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, title: string, text: string, textSnippet: string, picture?: string | null | undefined, points: number, voteStatus?: number | null | undefined, createdAt: string, updatedAt: string, author: { __typename?: 'User', id: number, username: string } } | null | undefined };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -276,7 +276,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, points: number, createdAt: string, updatedAt: string, textSnippet: string, text: string, picture?: string | null | undefined, voteStatus?: number | null | undefined, author: { __typename?: 'User', id: number, username: string } }> } };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -299,6 +299,7 @@ export const PostSnippetFragmentDoc = gql`
   updatedAt
   textSnippet
   text
+  picture
   voteStatus
   author {
     id
@@ -475,6 +476,7 @@ export const PostDocument = gql`
     id
     title
     text
+    textSnippet
     picture
     points
     voteStatus

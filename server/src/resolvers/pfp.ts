@@ -14,7 +14,7 @@ export class PictureResolver {
     //   formData.append("file", files[0]);
     //   formData.append("upload-preset", uploadPreset);
     // };
-
+    //@ts-ignore
     let imgUrl = "";
     return new Promise(async (resolve, reject) =>
       createReadStream()

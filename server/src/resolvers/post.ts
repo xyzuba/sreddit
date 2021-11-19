@@ -136,7 +136,6 @@ export class PostResolver {
 
     return true;
   }
-  //@Arg("id", () => Int) id: number
   @Query(() => FilteredPosts, { nullable: true })
   async filteredPosts(
     @Arg("id", () => Int) id: number
@@ -146,14 +145,6 @@ export class PostResolver {
       order: { createdAt: "DESC" },
     });
     return { posts };
-    // const posts = getConnection().query(
-    //   `
-    //   select p.*
-    //   from post as p
-    //   where p."authorId" = ${authorId}
-    //   `
-    // );
-    // return posts;
   }
 
   @Query(() => PaginatedPosts)

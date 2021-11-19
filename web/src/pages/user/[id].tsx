@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 import React from "react";
 import { EditDeleteCont } from "../../components/EditDeleteCont";
 import { Layout } from "../../components/Layout";
@@ -7,7 +8,6 @@ import { UpvoteSec } from "../../components/UpvoteSec";
 import { useFilteredPostsQuery, useUserQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useGetIntId } from "../../utils/useGetIntId";
-import NextLink from "next/link";
 
 const Profile = () => {
   const intId = useGetIntId();
