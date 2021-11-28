@@ -36,7 +36,7 @@ class UserResponse {
   user?: User;
 }
 
-Resolver(User);
+@Resolver(User)
 export class UserResolver {
   @Query(() => [User])
   users(): Promise<User[]> {
