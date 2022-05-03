@@ -28,7 +28,7 @@ const Upload: React.FC<uploadProps> = ({}) => {
         body: formData,
       });
       const data = await response.json();
-      console.log(data.public_id);
+      // console.log(data.public_id);
     });
   }, []);
 

@@ -36,7 +36,7 @@ const CreatePost: React.FC<{}> = ({}) => {
         body: formData,
       });
       const data = await response.json();
-      console.log(data.public_id);
+      // console.log(data.public_id);
       setUploadedFile({ public_id: data.public_id });
     });
   }, []);
