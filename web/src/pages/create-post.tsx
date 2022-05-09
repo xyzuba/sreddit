@@ -15,7 +15,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
   useIsAuth();
   const [, createPost] = useCreatePostMutation();
-
+  const [picture, setPicture] = useState(null);
   //-----------------------------
   // INTEGRATING PICTURES
   //-----------------------------
@@ -36,6 +36,7 @@ const CreatePost: React.FC<{}> = ({}) => {
         body: formData,
       });
       const data = await response.json();
+      setPicture(data);
       // console.log(data.public_id);
       setUploadedFile({ public_id: data.public_id });
     });
@@ -89,21 +90,32 @@ const CreatePost: React.FC<{}> = ({}) => {
           </Form>
         )}
       </Formik>
-      <Box
-        alignContent="center"
-        w={"100px"}
-        h={"100px"}
-        border="1px solid white"
-        {...getRootProps()}
-      >
-        <input
-          {...getInputProps()}
-          onSubmit={() => {
-            console.log(uploadedFile.public_id);
-          }}
-        />
-        <Text textAlign="center">Drop Zone</Text>
-      </Box>
+      {!picture ? (
+        <Flex
+          alignContent="center"
+          w={"200px"}
+          h={"200px"}
+          border="1px solid teal"
+          alignItems={"center"}
+          justifyContent={"center"}
+          borderStyle="dashed"
+          mt={"25px"}
+          {...getRootProps()}
+        >
+          <input
+            {...getInputProps()}
+            onSubmit={() => {
+              console.log(uploadedFile.public_id);
+            }}
+          />
+          <Text textAlign="center">Drop Zone</Text>
+        </Flex>
+      ) : (
+        <Box mt={"25px"}>
+          {/* @ts-ignore */}
+          <img src={picture.url} />
+        </Box>
+      )}
     </Layout>
   );
 };

@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: any) {
       <Head>
         <title>blanket</title>
       </Head>
-      <ChakraProvider resetCSS theme={theme}>
+      <ChakraProvider resetCSS>
         <Component {...pageProps} />
       </ChakraProvider>
     </>

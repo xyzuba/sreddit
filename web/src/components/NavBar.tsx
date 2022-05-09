@@ -64,15 +64,15 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         <Flex alignItems="center">
           <NextLink href="/">
             <Heading>
-              <Link>sReddit</Link>
+              <Link>blanket.</Link>
             </Heading>
           </NextLink>
-          {data?.me ? (
+          {data?.me && (
             <NextLink href="/create-post">
-              <Button ml={8}>create post</Button>
+              <Button bgColor={"lightblue"} ml={8}>
+                create post
+              </Button>
             </NextLink>
-          ) : (
-            <div></div>
           )}
         </Flex>
         {body}

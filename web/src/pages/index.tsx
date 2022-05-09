@@ -42,9 +42,10 @@ const Index = () => {
               <Flex
                 pos="relative"
                 borderRadius="10px"
-                bgColor="#2A2A35"
+                bgColor="#a3b8c3"
+                color={"white"}
                 _hover={{
-                  backgroundColor: "#2e2e3b",
+                  backgroundColor: "#97b3c2",
                   borderRadius: "10px",
                   transition: ".2s",
                 }}

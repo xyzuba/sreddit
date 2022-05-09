@@ -23,7 +23,8 @@ import { graphqlUploadExpress } from "graphql-upload";
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
-    database: "sreddit",
+    // database: "sreddit",
+    database: "gc-barb",
     username: "postgres",
     password: "postgres",
     logging: true,
@@ -33,7 +34,7 @@ const main = async () => {
   });
   conn.runMigrations();
 
-  // await Post.delete({});
+  await Post.delete({});
 
   const app = express();
 
